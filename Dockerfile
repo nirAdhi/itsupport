@@ -6,6 +6,7 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
+COPY prisma ./prisma
 RUN npm ci
 
 # --- Builder stage ---
@@ -31,7 +32,8 @@ ENV HOSTNAME=0.0.0.0
 
 # Install production deps for Prisma
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production && npm cache clean --force
+COPY prisma ./prisma
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy standalone Next.js server
 COPY --from=builder /app/.next/standalone ./
