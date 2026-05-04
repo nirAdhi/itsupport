@@ -1,0 +1,26 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   @default("USER") // USER or ADMIN
+  createdAt DateTime @default(now())
+}
+
+model Ticket {
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  issue         String
+  scheduledDate DateTime?
+  status        String   @default("PENDING") // PENDING, RESOLVED
+  createdAt     DateTime @default(now())
+}

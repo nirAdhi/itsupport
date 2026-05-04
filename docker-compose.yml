@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prasan-it-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Use absolute path inside container for SQLite persistence
+      DATABASE_URL: file:/app/data/dev.db
+      # Generate a strong secret for production (change this!)
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-strong-secret-key-2026}
+      NODE_ENV: production
+    volumes:
+      # Persist SQLite database across container restarts
+      - sqlite-data:/app/data
+    networks:
+      - prasan-network
+
+  # Optional: Caddy reverse proxy for HTTPS on Hetzner
+  # Uncomment this section if you want automatic HTTPS with a domain
+  # caddy:
+  #   image: caddy:2-alpine
+  #   container_name: prasan-it-caddy
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy-data:/data
+  #     - caddy-config:/config
+  #   networks:
+  #     - prasan-network
+  #   depends_on:
+  #     - app
+
+volumes:
+  sqlite-data:
+    driver: local
+  # caddy-data:
+  # caddy-config:
+
+networks:
+  prasan-network:
+    driver: bridge
