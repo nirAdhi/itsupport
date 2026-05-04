@@ -49,11 +49,14 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
+# Copy seed file to create admin user on startup
+COPY seed.mjs ./seed.mjs
+
 # Create data directory for SQLite persistence
 RUN mkdir -p /app/data
 
 # Expose port
 EXPOSE 3000
 
-# Start: push schema to SQLite DB, then start standalone server
-CMD ["sh", "-c", "DATABASE_URL=file:/app/data/dev.db npx prisma db push --accept-data-loss && node server.js"]
+# Start: push schema to SQLite DB, run seed, then start standalone server
+CMD ["sh", "-c", "DATABASE_URL=file:/app/data/dev.db npx prisma db push --accept-data-loss && DATABASE_URL=file:/app/data/dev.db node seed.mjs && node server.js"]
