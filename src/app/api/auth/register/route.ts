@@ -10,22 +10,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing email or password' }, { status: 400 });
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json({ error: 'Password must be at least 6 characters' }, { status: 400 });
+    }
+
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // First user is ADMIN, rest are USER
-    const userCount = await prisma.user.count();
-    const role = userCount === 0 ? 'ADMIN' : 'USER';
 
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
-        role
+        role: 'USER'
       }
     });
 

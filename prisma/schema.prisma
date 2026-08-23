@@ -20,6 +20,7 @@ model Ticket {
   name          String
   email         String
   issue         String
+  companySize   String?
   scheduledDate DateTime?
   status        String   @default("PENDING") // PENDING, RESOLVED
   createdAt     DateTime @default(now())

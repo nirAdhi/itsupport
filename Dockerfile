@@ -58,5 +58,5 @@ RUN mkdir -p /app/data
 # Expose port
 EXPOSE 3000
 
-# Start: push schema to SQLite DB, run seed, then start standalone server
-CMD ["sh", "-c", "DATABASE_URL=file:/app/data/dev.db npx prisma db push --accept-data-loss && DATABASE_URL=file:/app/data/dev.db node seed.mjs && node server.js"]
+# Start: apply migrations to SQLite DB, run seed, then start standalone server
+CMD ["sh", "-c", "DATABASE_URL=file:/app/data/dev.db npx prisma migrate deploy && DATABASE_URL=file:/app/data/dev.db node seed.mjs && node server.js"]

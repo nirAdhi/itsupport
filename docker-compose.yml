@@ -12,9 +12,16 @@ services:
     environment:
       # Use absolute path inside container for SQLite persistence
       DATABASE_URL: file:/app/data/dev.db
-      # Generate a strong secret for production (change this!)
-      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-strong-secret-key-2026}
+      # Required - the container refuses to start if these aren't set. Put real values in a .env file next to this compose file (never commit it).
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in your .env file to a long random string}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in your .env file}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in your .env file}
       NODE_ENV: production
+      # Optional - ticket notification emails are skipped if these aren't set
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
     volumes:
       # Persist SQLite database across container restarts
       - sqlite-data:/app/data

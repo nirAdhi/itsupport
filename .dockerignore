@@ -16,8 +16,4 @@ coverage
 *~
 .DS_Store
 Thumbs.db
-check-users.js
-test-login.js
-reset-admin.js
-create-admin.js
 dist

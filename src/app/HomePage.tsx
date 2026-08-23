@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 const CheckIcon = () => (
@@ -11,7 +12,7 @@ const ArrowRight = () => (
 );
 
 export default function HomePage() {
-  const [formData, setFormData] = useState({ name: '', email: '', issue: '', date: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', issue: '', date: '', companySize: '' });
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -35,14 +36,15 @@ export default function HomePage() {
           name: formData.name,
           email: formData.email,
           issue: formData.issue,
+          companySize: formData.companySize || null,
           scheduledDate: formData.date || null
         })
       });
       if (res.ok) {
-        setStatus('Ticket submitted successfully! We will contact you soon.');
-        setFormData({ name: '', email: '', issue: '', date: '' });
+        setStatus('Request received! We’ll be in touch to schedule your free audit call.');
+        setFormData({ name: '', email: '', issue: '', date: '', companySize: '' });
       } else {
-        setStatus('Failed to submit ticket. Please try again.');
+        setStatus('Failed to submit request. Please try again.');
       }
     } catch {
       setStatus('An error occurred.');
@@ -55,14 +57,19 @@ export default function HomePage() {
     <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}>
       {/* Navigation */}
       <header className={`mainNav ${scrolled ? 'scrolled' : ''}`}>
-        <a href="/"><Image src="/logo.png" alt="Prasan IT" width={160} height={50} style={{ objectFit: 'contain' }} priority /></a>
+        <Link href="/"><Image src="/logo.png" alt="Prasan IT" width={160} height={50} style={{ objectFit: 'contain' }} priority /></Link>
         <nav className="navLinks" style={{ marginLeft: 'auto', marginRight: '2rem' }}>
-          <a href="/">Home</a>
+          <Link href="/">Home</Link>
           <a href="#services">Services</a>
           <a href="#pricing">Pricing</a>
-          <a href="https://bio.prasanit.org" target="_blank" rel="noreferrer">About Us</a>
+          <Link href="/about">About Us</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
-        <a href="/login" className="navBtn">Client Login</a>
+        <a href="tel:+353894734870" style={{ marginRight: '1.5rem', fontWeight: 700, color: '#0a192f', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00a896" strokeWidth="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +353 89 473 4870
+        </a>
+        <Link href="/login" className="navBtn">Client Login</Link>
       </header>
 
       {/* Hero */}
@@ -79,7 +86,7 @@ export default function HomePage() {
             </p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <a href="#contact" className="btn-primary" style={{ background: '#00a896', boxShadow: '0 8px 24px rgba(0,168,150,0.3)' }}>
-                SCHEDULE YOUR FREE IT AUDIT <ArrowRight />
+                BOOK YOUR FREE IT AUDIT <ArrowRight />
               </a>
               <a href="https://mesh.prasanit.org/" target="_blank" rel="noreferrer" className="btn-secondary">MESH CONNECT</a>
             </div>
@@ -113,6 +120,51 @@ export default function HomePage() {
                 <p style={{ color: '#8892b0', lineHeight: 1.7, fontSize: '0.95rem' }}>{s.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section style={{ padding: '6rem 2rem', background: 'linear-gradient(135deg, #0a192f 0%, #112240 100%)', color: 'white' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Why Prasan IT</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#e6f1ff', marginBottom: '1rem' }}>A PARTNER, NOT JUST A HELPDESK</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
+            {[
+              { title: 'Dublin-Based Team', desc: 'You deal directly with a local team who understands Irish business needs — not an offshore call centre.' },
+              { title: 'Transparent Pricing', desc: 'Flat, predictable monthly plans. No surprise invoices — any extra work is quoted and approved up front.' },
+              { title: 'Security-First Approach', desc: 'Every engagement starts with protecting your data and systems, not bolted on as an afterthought.' },
+              { title: 'Responsive Support', desc: 'A real person picks up when something breaks — support built around your business hours.' }
+            ].map((v, i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '16px', padding: '2rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem', color: '#e6f1ff' }}>{v.title}</h3>
+                <p style={{ color: '#8892b0', lineHeight: 1.7, fontSize: '0.95rem' }}>{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Industries & Areas */}
+      <section style={{ padding: '5rem 2rem', background: 'white' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Industries We Serve</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem' }}>
+              {['Dental Practices', 'Small & Medium Businesses'].map((tag, i) => (
+                <span key={i} style={{ padding: '8px 20px', borderRadius: '20px', background: 'rgba(0,168,150,0.1)', color: '#007a7a', fontWeight: 600, fontSize: '0.9rem' }}>{tag}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Areas We Cover</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem' }}>
+              {['Dublin', 'Greater Dublin Area'].map((tag, i) => (
+                <span key={i} style={{ padding: '8px 20px', borderRadius: '20px', background: 'rgba(0,168,150,0.1)', color: '#007a7a', fontWeight: 600, fontSize: '0.9rem' }}>{tag}</span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -154,15 +206,44 @@ export default function HomePage() {
       <section style={{ padding: '6rem 2rem', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>How We Work</p>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0a192f', marginBottom: '1rem' }}>OUR INNOVATION PROCESS</h2>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>How It Works</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0a192f', marginBottom: '1rem' }}>HOW WE START WORKING TOGETHER</h2>
+            <p style={{ color: '#8892b0', maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem' }}>No commitment required to get started — just a clear picture of where your IT stands today.</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '3rem' }}>
-            {['Discovery', 'Analysis', 'Implementation', 'Optimization', 'Proactive Management'].map((step, i) => (
-              <div key={i} style={{ textAlign: 'center', flex: '1', minWidth: '160px', maxWidth: '200px' }}>
+            {[
+              { title: 'Free Discovery Call', desc: 'A short call to understand your setup, team size, and pain points.' },
+              { title: 'Written Audit & Recommendations', desc: 'We review your current infrastructure and send a plain-language summary of what we found and what we’d prioritise.' },
+              { title: 'Tailored Onboarding', desc: 'If it’s a fit, we agree a scope and get your business onboarded with no surprise costs.' }
+            ].map((step, i) => (
+              <div key={i} style={{ textAlign: 'center', flex: '1', minWidth: '220px', maxWidth: '280px' }}>
                 <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, #00a896 0%, #007a7a 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', fontWeight: 700, boxShadow: '0 8px 24px rgba(0,168,150,0.3)' }}>{i + 1}</div>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0a192f', marginBottom: '0.5rem' }}>{step}</h4>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0a192f', marginBottom: '0.5rem' }}>{step.title}</h4>
+                <p style={{ color: '#8892b0', fontSize: '0.9rem', lineHeight: 1.7 }}>{step.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section style={{ padding: '6rem 2rem', background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Questions</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0a192f' }}>FREQUENTLY ASKED QUESTIONS</h2>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {[
+              { q: 'What does the free IT audit actually involve?', a: 'A short discovery call followed by a review of your current setup. You’ll get a written summary of what we found, what we’d prioritise, and what ongoing support could look like — with no obligation to proceed.' },
+              { q: 'How is pricing structured?', a: 'Managed support is billed as a flat monthly fee based on your team size and scope, agreed before any work starts. Anything outside that scope is quoted and approved before it happens — no surprise invoices.' },
+              { q: 'Do you work with businesses that already have some in-house IT?', a: 'Yes — we regularly work alongside an existing in-house team, taking on specific areas like security, backups, or overflow support rather than replacing them.' },
+              { q: 'How quickly do you respond to support requests?', a: 'Support requests are handled during business hours by our Dublin-based team. Response time targets are agreed as part of your service plan.' }
+            ].map((item, i) => (
+              <details key={i} style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem 1.5rem' }}>
+                <summary style={{ cursor: 'pointer', fontWeight: 700, color: '#0a192f', fontSize: '1rem' }}>{item.q}</summary>
+                <p style={{ color: '#64748b', marginTop: '0.75rem', lineHeight: 1.7, fontSize: '0.95rem' }}>{item.a}</p>
+              </details>
             ))}
           </div>
         </div>
@@ -172,9 +253,9 @@ export default function HomePage() {
       <section id="contact" style={{ padding: '6rem 2rem', background: 'linear-gradient(135deg, #0a192f 0%, #112240 100%)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '4rem', alignItems: 'start' }}>
           <div>
-            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Get In Touch</p>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#e6f1ff', marginBottom: '1.5rem' }}>LET'S START A CONVERSATION</h2>
-            <p style={{ color: '#8892b0', marginBottom: '2rem', lineHeight: 1.7 }}>Ready to transform your IT infrastructure? Our team is here to help you every step of the way.</p>
+            <p style={{ color: '#00a896', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '1rem' }}>Free, No-Obligation Audit</p>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#e6f1ff', marginBottom: '1.5rem' }}>BOOK YOUR FREE IT AUDIT</h2>
+            <p style={{ color: '#8892b0', marginBottom: '2rem', lineHeight: 1.7 }}>A short discovery call, a review of your current setup, and a written summary of what we found and what we&apos;d recommend — no obligation to proceed.</p>
             <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', color: '#ccd6f6' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00a896" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -194,8 +275,16 @@ export default function HomePage() {
             <form onSubmit={handleSubmit}>
               <input type="text" placeholder="Your Name" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} disabled={isSubmitting} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '10px' }} />
               <input type="email" placeholder="Your Email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={isSubmitting} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '10px' }} />
-              <textarea placeholder="How can we help you?" rows={4} required value={formData.issue} onChange={e => setFormData({...formData, issue: e.target.value})} disabled={isSubmitting} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '10px' }} />
-              <button type="submit" className="btn-primary" style={{ width: '100%', marginTop: '0.5rem', background: '#00a896' }} disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'SEND MESSAGE'}</button>
+              <select required value={formData.companySize} onChange={e => setFormData({...formData, companySize: e.target.value})} disabled={isSubmitting} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '10px' }}>
+                <option value="" disabled style={{ color: '#0a192f' }}>Company Size</option>
+                <option value="1-10" style={{ color: '#0a192f' }}>1-10 employees</option>
+                <option value="11-25" style={{ color: '#0a192f' }}>11-25 employees</option>
+                <option value="26-50" style={{ color: '#0a192f' }}>26-50 employees</option>
+                <option value="51-100" style={{ color: '#0a192f' }}>51-100 employees</option>
+                <option value="100+" style={{ color: '#0a192f' }}>100+ employees</option>
+              </select>
+              <textarea placeholder="What's going on with your IT today?" rows={4} required value={formData.issue} onChange={e => setFormData({...formData, issue: e.target.value})} disabled={isSubmitting} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '10px' }} />
+              <button type="submit" className="btn-primary" style={{ width: '100%', marginTop: '0.5rem', background: '#00a896' }} disabled={isSubmitting}>{isSubmitting ? 'Sending...' : 'BOOK MY FREE AUDIT'}</button>
               {status && <p style={{ marginTop: '1rem', color: '#00a896', textAlign: 'center', fontSize: '0.95rem' }}>{status}</p>}
             </form>
           </div>
@@ -209,11 +298,14 @@ export default function HomePage() {
             <Image src="/logo.png" alt="Prasan IT" width={140} height={40} style={{ objectFit: 'contain', filter: 'brightness(1.2)' }} />
             <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.5rem' }}>Trusted IT Support & Solutions</p>
           </div>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <a href="/" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Home</a>
+          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+            <Link href="/" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Home</Link>
+            <Link href="/about" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>About</Link>
             <a href="#services" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Services</a>
             <a href="#pricing" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Pricing</a>
-            <a href="/login" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Login</a>
+            <Link href="/privacy" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Privacy Policy</Link>
+            <Link href="/terms" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Terms</Link>
+            <Link href="/login" style={{ color: '#8892b0', fontSize: '0.9rem', transition: 'color 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.color = '#00a896'} onMouseLeave={e => e.currentTarget.style.color = '#8892b0'}>Login</Link>
           </div>
           <p style={{ color: '#64748b', fontSize: '0.85rem' }}>© {new Date().getFullYear()} prasanit.org. All rights reserved.</p>
         </div>

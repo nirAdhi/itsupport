@@ -1,13 +1,12 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,17 +49,17 @@ export default function Login() {
       {/* Header */}
       <header style={{ padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <a href="/"><Image src="/logo.png" alt="Prasan IT Logo" width={160} height={50} style={{ objectFit: 'contain' }} priority /></a>
+          <Link href="/"><Image src="/logo.png" alt="Prasan IT Logo" width={160} height={50} style={{ objectFit: 'contain' }} priority /></Link>
         </div>
         <nav style={{ display: 'flex', gap: '2rem', fontWeight: 600, color: 'var(--secondary)' }}>
-          <a href="/">Home</a>
-          <a href="/#services">Services</a>
-          <a href="/#contact">Contact</a>
+          <Link href="/">Home</Link>
+          <Link href="/#services">Services</Link>
+          <Link href="/#contact">Contact</Link>
           <a href="https://bio.prasanit.org" target="_blank" rel="noreferrer">About Us</a>
         </nav>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <a href="/register" className="btn-secondary" style={{ padding: '8px 24px', fontSize: '0.9rem', color: 'var(--primary)', borderColor: 'var(--primary)' }}>Register</a>
-          <a href="/login" className="btn-primary" style={{ padding: '8px 24px', fontSize: '0.9rem' }}>Login</a>
+          <Link href="/register" className="btn-secondary" style={{ padding: '8px 24px', fontSize: '0.9rem', color: 'var(--primary)', borderColor: 'var(--primary)' }}>Register</Link>
+          <Link href="/login" className="btn-primary" style={{ padding: '8px 24px', fontSize: '0.9rem' }}>Login</Link>
         </div>
       </header>
 
@@ -77,7 +76,7 @@ export default function Login() {
             </button>
           </form>
           <p style={{ marginTop: '1rem', textAlign: 'center' }}>
-            <a href="/register" style={{ color: 'var(--primary)' }}>Don&apos;t have an account? Register</a>
+            <Link href="/register" style={{ color: 'var(--primary)' }}>Don&apos;t have an account? Register</Link>
           </p>
         </div>
       </div>
